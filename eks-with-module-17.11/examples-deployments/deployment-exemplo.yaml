@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: public.ecr.aws/nginx/nginx:1.19.6
+          ports:
+            - name: http
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31381
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: nginx    
+---    
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: target-sample-service
+  namespace: default
+spec:
+  serviceRef:
+    name: sample-service # route traffic to the awesome-service
+    port: 80         
+  targetGroupARN: arn:aws:elasticloadbalancing:us-east-1:779882487479:targetgroup/istio-80-31381/1efbc21231b7716d
+  targetType: ip # instance for ec2, ip for fargate
+  networking:
+    ingress:
+    - from:
+      - ipBlock:
+          cidr: 0.0.0.0/0 # subnet-1 cidr
+      ports:
+      - protocol: TCP # Allow all TCP traffic from ALB SG    
+        port: 31381 # NodePort from Istio Ingress
