@@ -1,62 +1,62 @@
 
-# resource "helm_release" "istio_base" {
-#   name             = "istio-base"
-#   chart            = "./helm/istio-1.11.1/manifests/charts/base"
-#   namespace        = "istio-system"
-#   create_namespace = true
-#   depends_on = [
-#     module.eks,
-#     data.aws_eks_cluster_auth.cluster,
-#   ]
-# }
+resource "helm_release" "istio_base" {
+  name             = "istio-base"
+  chart            = "./helm/istio-1.11.1/manifests/charts/base"
+  namespace        = "istio-system"
+  create_namespace = true
+  depends_on = [
+    module.eks,
+    data.aws_eks_cluster_auth.cluster,
+  ]
+}
 
-# resource "helm_release" "istio_discovery" {
-#   name             = "istiod"
-#   chart            = "./helm/istio-1.11.1/manifests/charts/istio-control/istio-discovery"
-#   namespace        = "istio-system"
-#   create_namespace = true
-#   depends_on = [
-#     helm_release.istio_base
-#   ]
-# }
+resource "helm_release" "istio_discovery" {
+  name             = "istiod"
+  chart            = "./helm/istio-1.11.1/manifests/charts/istio-control/istio-discovery"
+  namespace        = "istio-system"
+  create_namespace = true
+  depends_on = [
+    helm_release.istio_base
+  ]
+}
 
-# resource "helm_release" "istio_ingress" {
-#   name      = "istio-ingress"
-#   chart     = "./helm/istio-1.11.1/manifests/charts/gateways/istio-ingress"
-#   namespace = "istio-system"
-#   # set {
-#   #   name = "gateways.istio-ingressgateway.serviceAnnotations.service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"
-#   #   value = "ip"
-#   # }
+resource "helm_release" "istio_ingress" {
+  name      = "istio-ingress"
+  chart     = "./helm/istio-1.11.1/manifests/charts/gateways/istio-ingress"
+  namespace = "istio-system"
+  # set {
+  #   name = "gateways.istio-ingressgateway.serviceAnnotations.service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"
+  #   value = "ip"
+  # }
 
-#   # set {
-#   #   name = "gateways.istio-ingressgateway.serviceAnnotations.service.beta.kubernetes.io/aws-load-balancer-scheme"
-#   #   value = "internet-facing"
-#   # }
+  # set {
+  #   name = "gateways.istio-ingressgateway.serviceAnnotations.service.beta.kubernetes.io/aws-load-balancer-scheme"
+  #   value = "internet-facing"
+  # }
 
-#   depends_on = [
-#     helm_release.istio_discovery
-#   ]
-# }
+  depends_on = [
+    helm_release.istio_discovery
+  ]
+}
 
-# resource "helm_release" "istio_egress" {
-#   name      = "istio-egress"
-#   chart     = "./helm/istio-1.11.1/manifests/charts/gateways/istio-egress"
-#   namespace = "istio-system"
-#   depends_on = [
-#     helm_release.istio_discovery
-#   ]
-# }
+resource "helm_release" "istio_egress" {
+  name      = "istio-egress"
+  chart     = "./helm/istio-1.11.1/manifests/charts/gateways/istio-egress"
+  namespace = "istio-system"
+  depends_on = [
+    helm_release.istio_discovery
+  ]
+}
 
-# # Gateway of applications
-# resource "helm_release" "istio_gateway_applications" {
-#   name      = "istio-gateway-applications"
-#   chart     = "./helm/istio-gateway-applications"
-#   namespace = "istio-system"
-#   depends_on = [
-#     helm_release.istio_ingress
-#   ]
-# }
+# Gateway of applications
+resource "helm_release" "istio_gateway_applications" {
+  name      = "istio-gateway-applications"
+  chart     = "./helm/istio-gateway-applications"
+  namespace = "istio-system"
+  depends_on = [
+    helm_release.istio_ingress
+  ]
+}
 
 # # # Binding between istio and nlb
 # # resource "helm_release" "istio_ingress_target_group_binding" {

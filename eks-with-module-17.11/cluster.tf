@@ -135,11 +135,11 @@ module "eks" {
   workers_role_name                              = aws_iam_role.workers[0].name
   worker_create_security_group                   = false
   worker_security_group_id                       = aws_security_group.workers[0].id
-  # fargate_profiles                               = {}
-  fargate_profiles                               = merge({}, var.fargate_profiles) # Created after nodegroups
-  create_fargate_pod_execution_role              = false
-  fargate_pod_execution_role_name                = aws_iam_role.workers[0].name
-  write_kubeconfig                               = false
+  fargate_profiles                               = {}
+  # fargate_profiles                  = merge({}, var.fargate_profiles) # Created after nodegroups
+  create_fargate_pod_execution_role = false
+  fargate_pod_execution_role_name   = aws_iam_role.workers[0].name
+  write_kubeconfig                  = false
   depends_on = [
     aws_iam_role.workers
   ]
@@ -152,7 +152,7 @@ module "eks" {
 
   node_groups = {
     example = {
-      desired_capacity = 5
+      desired_capacity = 2
       max_capacity     = 5
       min_capacity     = 1
 

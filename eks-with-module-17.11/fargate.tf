@@ -129,26 +129,26 @@ resource "aws_security_group_rule" "cluster_https_worker_ingress" {
 }
 
 # Fix annotation of computing to only EC2
-resource "null_resource" "patch_coredns_deployment" {
-  provisioner "local-exec" {
-    when        = create
-    interpreter = ["/bin/bash", "-c"]
-    environment = {
-      KUBECONFIG = base64encode(data.template_file.kubeconfig.rendered)
-    }
-    command = <<EOF
-kubectl patch deployment coredns -n kube-system --type json -p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]' --kubeconfig <(echo $KUBECONFIG | base64 -d)
-kubectl rollout restart deployments -n kube-system --kubeconfig <(echo $KUBECONFIG | base64 -d)
-EOF
-  }
+# resource "null_resource" "patch_coredns_deployment" {
+#   provisioner "local-exec" {
+#     when        = create
+#     interpreter = ["/bin/bash", "-c"]
+#     environment = {
+#       KUBECONFIG = base64encode(data.template_file.kubeconfig.rendered)
+#     }
+#     command = <<EOF
+# kubectl patch deployment coredns -n kube-system --type json -p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]' --kubeconfig <(echo $KUBECONFIG | base64 -d)
+# kubectl rollout restart deployments -n kube-system --kubeconfig <(echo $KUBECONFIG | base64 -d)
+# EOF
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
 
-  depends_on = [
-    module.eks,
-    data.aws_eks_cluster_auth.cluster,
-    module.eks.fargate_profile_ids
-  ]
-}
+#   depends_on = [
+#     module.eks,
+#     data.aws_eks_cluster_auth.cluster,
+#     module.eks.fargate_profile_ids
+#   ]
+# }
