@@ -1,5 +1,6 @@
 # A-la-carte istio ingress gateway.
 # Must be installed in a separate namespace, to minimize access to secrets.
+timestamp: ""
 gateways:
   istio-ingressgateway:
     name: istio-ingressgateway
@@ -50,10 +51,10 @@ gateways:
     loadBalancerSourceRanges: []
     serviceAnnotations: {
       # "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": "ip",
-      "service.beta.kubernetes.io/aws-load-balancer-type": "nlb-ip",
-      "service.beta.kubernetes.io/aws-load-balancer-internal": "true",
-      "service.beta.kubernetes.io/aws-load-balancer-scheme": "internal",
-      "service.beta.kubernetes.io/aws-load-balancer-proxy-protocol": "*"
+      # "service.beta.kubernetes.io/aws-load-balancer-type": "nlb-ip",
+      # "service.beta.kubernetes.io/aws-load-balancer-internal": "true",
+      # "service.beta.kubernetes.io/aws-load-balancer-scheme": "internal",
+      # "service.beta.kubernetes.io/aws-load-balancer-proxy-protocol": "*"
     }
 
     # Enable cross-cluster access using SNI matching

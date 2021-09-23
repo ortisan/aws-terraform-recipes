@@ -9,7 +9,7 @@
       "Condition": {
         "StringEquals": {
           "${oidc_url}:aud": "sts.amazonaws.com",
-          "${oidc_url}:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+          "${oidc_url}:sub": "system:serviceaccount:kube-system:aws-loadbalancer-controller"
         }
       },
       "Action": "sts:AssumeRoleWithWebIdentity"

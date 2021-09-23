@@ -24,6 +24,10 @@ resource "helm_release" "istio_ingress" {
   name      = "istio-ingress"
   chart     = "./helm/istio-1.11.1/manifests/charts/gateways/istio-ingress"
   namespace = "istio-system"
+  set {
+    name = "timestamp"
+    value= "1"
+  }
   # set {
   #   name = "gateways.istio-ingressgateway.serviceAnnotations.service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"
   #   value = "ip"
@@ -58,32 +62,32 @@ resource "helm_release" "istio_gateway_applications" {
   ]
 }
 
-# # # Binding between istio and nlb
-# # resource "helm_release" "istio_ingress_target_group_binding" {
-# #   name             = "istio-ingress-target-group-binding2"
-# #   chart            = "./helm/istio-ingress-target-group-binding"
-# #   namespace        = "istio-system"
-# #   create_namespace = true
+# Binding between istio and nlb
+resource "helm_release" "istio_ingress_target_group_binding" {
+  name             = "istio-ingress-target-group-binding2"
+  chart            = "./helm/istio-ingress-target-group-binding"
+  namespace        = "istio-system"
+  create_namespace = true
 
-# #   set {
-# #     name  = "name"
-# #     value = "istiobinding2"
-# #   }
+  set {
+    name  = "name"
+    value = "istiobinding2"
+  }
 
-# #   set {
-# #     name  = "tg_80_arn"
-# #     value = aws_lb_target_group.istio_80_31381.arn
-# #   }
+  set {
+    name  = "tg_80_arn"
+    value = aws_lb_target_group.istio_80_31381.arn
+  }
 
-# #   set {
-# #     name  = "target_type"
-# #     value = aws_lb_target_group.istio_80_31381.target_type
-# #   }
+  set {
+    name  = "target_type"
+    value = aws_lb_target_group.istio_80_31381.target_type
+  }
 
-# #   depends_on = [
-# #     aws_lb_target_group.istio_80_31381,
-# #     helm_release.istio_ingress,
-# #     # helm_release.aws_load_balancer
-# #   ]
-# # }
+  depends_on = [
+    aws_lb_target_group.istio_80_31381,
+    helm_release.istio_ingress,
+    helm_release.aws_load_balancer
+  ]
+}
 

@@ -310,7 +310,7 @@ resource "helm_release" "aws_load_balancer" {
   }
   set {
     name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
+    value = "aws-loadbalancer-controller"
   }
 
   depends_on = [
