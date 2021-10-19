@@ -12,7 +12,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-## Package
+## Package Lambda
 
 ```sh
 sh make.sh

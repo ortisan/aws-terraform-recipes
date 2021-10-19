@@ -56,7 +56,7 @@ resource "aws_cloudwatch_log_group" "bitcoin_now_lambda" {
 }
 
 resource "aws_lambda_function" "bitcoin_now_lambda" {
-  function_name = "bitcoin_now_lambda"
+  function_name = "bitcoinnow"
   filename      = "lambda-sources/deployment.zip"
   role          = aws_iam_role.bitcoin_now_lambda.arn
   handler       = "bitcoinnow.handle"
