@@ -27,6 +27,21 @@ resource "aws_security_group_rule" "rds_user_ingress" {
   type              = "ingress"
 }
 
+resource "aws_rds_cluster_parameter_group" "default" {
+  name   = "default-mysql-pg"
+  family = "aurora-mysql"
+
+  parameter {
+    name  = "character_set_server"
+    value = "utf8"
+  }
+
+  parameter {
+    name  = "character_set_client"
+    value = "utf8"
+  }
+}
+
 resource "aws_rds_cluster" "user" {
   cluster_identifier              = "user"
   database_name                   = "user"
@@ -35,8 +50,11 @@ resource "aws_rds_cluster" "user" {
   availability_zones              = ["us-east-1a", "us-east-1b", "us-east-1c"]
   master_username                 = "ortisan"
   master_password                 = "ortisan123"
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.id
   storage_encrypted               = true
   enabled_cloudwatch_logs_exports = ["error", "slowquery"]
+  vpc_security_group_ids          = [aws_security_group.rds_user.id]
+  skip_final_snapshot             = true
 }
 
 resource "aws_rds_cluster_instance" "user" {
