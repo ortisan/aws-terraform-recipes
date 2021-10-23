@@ -23,8 +23,8 @@ python generate_inserts.py
 ## Connect to DB Instance and insert rows
 
 ```sh
-mysql -h <db_instance_endpoint> -u ortisan -portisan123 uuserdb < automate/scripts/1-schema.sql
-mysql -h <db_instance_endpoint> -u ortisan -portisan123 uuserdb < automate/scripts/2-inserts.sql
+mysql -h <db_instance_endpoint> -u ortisan -portisan123 userdb < automate/scripts/1-schema.sql
+mysql -h <db_instance_endpoint> -u ortisan -portisan123 userdb < automate/scripts/2-inserts.sql
 ```
 ## Create snapshot
 
