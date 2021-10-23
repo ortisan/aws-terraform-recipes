@@ -17,3 +17,15 @@ cd aurora
 terraform init
 terraform apply -auto-approve
 ```
+
+## Fake DB rows
+
+
+
+```sh
+cd automate/data-generator
+conda create -n data-generator python=3.8.8
+conda activate data-generator
+pip install -r requirements.txt
+python generate_inserts.py
+```

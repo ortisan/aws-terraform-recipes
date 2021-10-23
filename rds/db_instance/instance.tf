@@ -46,8 +46,8 @@ resource "aws_db_instance" "user" {
   engine                          = "mysql"
   engine_version                  = "8.0.23"
   instance_class                  = "db.t3.medium"
-  name                            = "db-user"
-  identifier                      = "db-user"
+  name                            = "userdb"
+  identifier                      = "userdb"
   username                        = "ortisan"
   password                        = "ortisan123"
   parameter_group_name            = aws_db_parameter_group.default.id
