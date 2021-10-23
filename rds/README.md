@@ -10,7 +10,7 @@ terraform init
 terraform apply -auto-approve
 ```
 
-## Create Aurora (IN PROGRESS...)
+## Create Aurora
 
 ```sh
 cd aurora

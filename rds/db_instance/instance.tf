@@ -45,7 +45,7 @@ resource "aws_db_parameter_group" "default" {
 resource "aws_db_instance" "user" {
   engine                          = "mysql"
   engine_version                  = "8.0.23"
-  instance_class                  = "db.r5.medium"
+  instance_class                  = "db.t3.medium"
   name                            = "db-user"
   identifier                      = "db-user"
   username                        = "ortisan"

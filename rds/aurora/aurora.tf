@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "rds_user_ingress" {
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name   = "default-mysql-pg"
-  family = "aurora-mysql"
+  family = "aurora-mysql5.7"
 
   parameter {
     name  = "character_set_server"
@@ -46,7 +46,7 @@ resource "aws_rds_cluster" "user" {
   cluster_identifier              = "user"
   database_name                   = "user"
   engine                          = "aurora-mysql"
-  engine_version                  = "5.7.mysql_aurora.2.07.2"
+  engine_version                  = "5.7.mysql_aurora.2.10.1"
   availability_zones              = ["us-east-1a", "us-east-1b", "us-east-1c"]
   master_username                 = "ortisan"
   master_password                 = "ortisan123"
@@ -61,7 +61,7 @@ resource "aws_rds_cluster_instance" "user" {
   count              = 2
   identifier         = "user-instance-${count.index}"
   cluster_identifier = aws_rds_cluster.user.id
-  instance_class     = "db.r5.large"
+  instance_class     = "db.t3.medium"
   engine             = aws_rds_cluster.user.engine
   engine_version     = aws_rds_cluster.user.engine_version
 }
