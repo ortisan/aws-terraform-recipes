@@ -22,8 +22,8 @@ resource "aws_security_group_rule" "rds_user_ingress" {
   protocol          = "tcp"
   security_group_id = aws_security_group.rds_user.id
   cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  to_port           = 0
+  from_port         = 3306
+  to_port           = 3306
   type              = "ingress"
 }
 
@@ -57,7 +57,15 @@ resource "aws_db_instance" "user" {
   max_allocated_storage           = 100
   storage_type                    = "gp2"
   storage_encrypted               = true
+  publicly_accessible             = true
   enabled_cloudwatch_logs_exports = ["error", "slowquery"]
   auto_minor_version_upgrade      = true
   vpc_security_group_ids          = [aws_security_group.rds_user.id]
+  depends_on = [
+    aws_security_group.rds_user
+  ]
+}
+
+output "rds_endpoint" {
+  value = aws_db_instance.user.endpoint
 }
