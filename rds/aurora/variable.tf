@@ -10,5 +10,5 @@ variable "vpc_id" {
 
 variable "db_instance_snapshot_arn" {
   description = "ARN of DB Instance snapshot"
-  default = "arn:aws:rds:us-east-1:779882487479:snapshot:userdbsnapshot"
+  default     = "arn:aws:rds:us-east-1:779882487479:snapshot:userdbsnapshot"
 }

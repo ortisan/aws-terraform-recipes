@@ -1,0 +1,15 @@
+{
+  "rules": [
+    {
+      "rule-type": "selection",
+      "rule-id": "1",
+      "rule-name": "select_chema",
+      "object-locator": {
+        "schema-name": "userdb",
+        "table-name": "%"
+      },
+      "rule-action": "include",
+      "filters": []
+    }
+  ]
+}
