@@ -10,14 +10,14 @@ Follow the [RDS instructions](https://github.com/ortisan/aws-terraform-recipes/t
 
 ## Environment
 
-Change values of region, connections of source and target endpoints and security infos like security group and if you need KMS.
+Into variable.tf file, change values of region, connections of source and target endpoints and security infos like security group and if you need KMS.
 
 ```sh
 terraform init
 terraform apply -auto-approve
 ```
 
-After starting task, the tables will be migrate:
+After starting task, the entire **userdb schema** will be migrate from DB Instance to Aurora:
 
 Starting task:
 ![image](images/dms-start.png)

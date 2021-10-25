@@ -53,27 +53,3 @@ terraform apply -auto-approve
 
 ### Docs:
 https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html
-
-## Use DMS for Sync
-
-```sh
-cd dms
-terraform init
-terraform apply -auto-approve
-```
-
-After starting task, the tables will be migrate:
-
-Starting task:
-![image](images/dms-start.png)
-
-End taks:
-![image](images/dms-ends.png)
-
-Result:
-![image](images/dms-result.png)
-
-
-### Docs:
-
-https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Introduction.HighLevelView.html
