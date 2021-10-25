@@ -76,8 +76,4 @@ Result:
 
 ### Docs:
 
-<<<<<<< HEAD
 https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Introduction.HighLevelView.html
-=======
-https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html
->>>>>>> 1616b8ff989ff950ad5b337973b7ea180e049b71
