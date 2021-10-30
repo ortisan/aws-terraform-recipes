@@ -4,7 +4,7 @@ Use DMS for data migration.
 
 ## Pre reqs.
 
-For this recipe, you neeed have a DB Instance RDS (Source) and an Aurora Mysql RDS (Target).
+For this recipe, you neeed to have a DB Instance RDS (Source) and an Aurora Mysql RDS (Target).
 
 Follow the [RDS instructions](https://github.com/ortisan/aws-terraform-recipes/tree/main/rds/README.md) to provisione RDS source and target.
 
