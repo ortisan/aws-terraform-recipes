@@ -7,7 +7,7 @@ if __name__ == "__main__":
    fake = Faker()
    
    with open("../scripts/2-inserts.sql", "w") as inserts_file:
-      for i in range (1000):
+      for i in range (100):
          id = str(uuid.uuid4())
          name = fake.name()
          email = fake.email()
