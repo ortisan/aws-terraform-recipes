@@ -12,5 +12,8 @@ if __name__ == "__main__":
          name = fake.name()
          email = fake.email()
          address = fake.address().replace("\n", " ")
+         paper = fake.paragraph(nb_sentences=5)
          # Write into inserts file
          inserts_file.write(f"INSERT INTO user (id, fullname, email, address) VALUES ('{id}', '{name}', '{email}', '{address}');\n")
+         inserts_file.write(f"INSERT INTO paper (id, user_id, title) VALUES ('{id}', '{id}', '{paper}');\n")
+         

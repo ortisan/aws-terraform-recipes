@@ -40,6 +40,12 @@ resource "aws_db_parameter_group" "default" {
     name  = "character_set_client"
     value = "utf8"
   }
+
+  # REQUIRED FOR DMS (https://aws.amazon.com/pt/premiumsupport/knowledge-center/dms-binary-logging-aurora-mysql/)
+  parameter {
+    name  = "binlog_format"
+    value = "ROW"
+  }
 }
 
 resource "aws_db_instance" "user" {
@@ -59,6 +65,7 @@ resource "aws_db_instance" "user" {
   storage_encrypted               = true
   publicly_accessible             = true
   enabled_cloudwatch_logs_exports = ["error", "slowquery"]
+  backup_retention_period         = 7
   auto_minor_version_upgrade      = true
   vpc_security_group_ids          = [aws_security_group.rds_user.id]
   depends_on = [

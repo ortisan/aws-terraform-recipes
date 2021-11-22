@@ -1,0 +1,13 @@
+{
+  "FullLoadSettings": {
+    "TargetTablePrepMode": "DO_NOTHING",
+    "StopTaskCachedChangesApplied": true
+  },
+  "Logging": {
+    "EnableLogging": true
+  },  
+  "ValidationSettings": {
+    "EnableValidation": true,
+    "ValidationMode": "ROW_LEVEL"
+  }
+}

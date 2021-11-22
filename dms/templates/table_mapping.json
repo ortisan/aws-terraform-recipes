@@ -3,12 +3,25 @@
     {
       "rule-type": "selection",
       "rule-id": "1",
-      "rule-name": "select_chema",
+      "rule-name": "user",
       "object-locator": {
         "schema-name": "userdb",
-        "table-name": "%"
+        "table-name": "user"
       },
       "rule-action": "include",
+      "load-order": 1,
+      "filters": []
+    },
+    {
+      "rule-type": "selection",
+      "rule-id": "2",
+      "rule-name": "paper",
+      "object-locator": {
+        "schema-name": "userdb",
+        "table-name": "paper"
+      },
+      "rule-action": "include",
+      "load-order": 2,
       "filters": []
     }
   ]

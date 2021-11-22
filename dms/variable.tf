@@ -1,3 +1,7 @@
+variable "create_dms" {
+  default = "true"
+}
+
 variable "region" {
   default = "us-east-1"
 }

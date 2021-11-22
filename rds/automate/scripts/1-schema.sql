@@ -1,1 +1,2 @@
 CREATE TABLE IF NOT EXISTS user (id VARCHAR(36), fullname VARCHAR(100), email VARCHAR(100), address VARCHAR(30), PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS paper (id VARCHAR(36), user_id VARCHAR(36), title VARCHAR(500), PRIMARY KEY (id), INDEX user_id (user_id), FOREIGN KEY (user_id) REFERENCES user(id));
