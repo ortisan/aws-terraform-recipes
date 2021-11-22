@@ -16,12 +16,12 @@ resource "aws_dms_replication_instance" "replication_userdb" {
   allocated_storage            = 100
   apply_immediately            = false
   auto_minor_version_upgrade   = true
-  availability_zone            = "us-east-1a"
+  availability_zone            = "us-east-1b"
   engine_version               = "3.4.5"
   multi_az                     = false
   preferred_maintenance_window = "sun:23:00-sun:23:59"
   publicly_accessible          = false
-  replication_instance_class   = "dms.t2.medium"
+  replication_instance_class   = "dms.t2.micro"
   replication_instance_id      = "replication-userdb"
   replication_subnet_group_id  = aws_dms_replication_subnet_group.userdb[0].id
   tags = {
