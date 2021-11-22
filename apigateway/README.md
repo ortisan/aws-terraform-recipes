@@ -29,6 +29,6 @@ terraform apply -auto-approve
 
 ![image](images/apigateway.png)
 
-## Execuction API Gateway
+## Execute API Gateway
 
 ![image](images/apigateway-lambda.png)
