@@ -15,6 +15,6 @@ variable "ec2_instance_type" {
 }
 
 variable "task_image" {
-  default = "779882487479.dkr.ecr.us-east-1.amazonaws.com/test-secrets:latest"
-  # default = "public.ecr.aws/nginx/nginx:latest"
+  # default = "779882487479.dkr.ecr.us-east-1.amazonaws.com/test-secrets:latest"
+  default = "public.ecr.aws/nginx/nginx:latest"
 }

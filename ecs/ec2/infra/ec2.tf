@@ -1,3 +1,29 @@
+resource "aws_security_group" "ec2_router" {
+  description = "router-ec2"
+  name        = "router-ec2"
+  vpc_id      = data.aws_vpc.router.id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    from_port = 0
+    protocol  = "tcp"
+    # security_groups = [aws_security_group.elb.id]
+    cidr_blocks = [data.aws_vpc.router.cidr_block]
+    to_port     = 65535
+  }
+
+  tags = {
+    Env  = "development"
+    Name = "sg-router-ec2"
+  }
+}
+
 data "aws_iam_policy_document" "ec2_router" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -37,44 +63,17 @@ data "aws_ssm_parameter" "ami_ecs" {
 #   owners      = ["amazon"]
 # }
 
-resource "aws_security_group" "ec2_router" {
-  description = "router-ec2"
-
-  egress {
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    protocol    = "-1"
-    to_port     = 0
-  }
-
-  ingress {
-    from_port = 0
-    protocol  = "tcp"
-    # security_groups = [aws_security_group.elb.id]
-    cidr_blocks = [data.aws_vpc.router.cidr_block]
-    to_port     = 65535
-  }
-
-  name = "router-ec2"
-
-  tags = {
-    Env  = "development"
-    Name = "sg-router-ec2"
-  }
-  vpc_id = data.aws_vpc.router.id
-}
-
 resource "aws_placement_group" "router" {
   name     = "router"
   strategy = "spread" # More available
 }
 
 resource "aws_launch_configuration" "router" {
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   iam_instance_profile        = aws_iam_instance_profile.router.id
   # image_id                    = data.aws_ami.router.id
   image_id      = data.aws_ssm_parameter.ami_ecs.value
-  instance_type = "t3.micro"
+  instance_type = "t3.large"
   # key_name      = "EC2-Router"
 
   lifecycle {
