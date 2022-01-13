@@ -27,9 +27,9 @@ resource "aws_security_group" "elb" {
 
 
 resource "aws_lb" "router" {
-  name                       = "router"
-  internal                   = true
-  load_balancer_type         = "network"
+  name               = "router"
+  internal           = true
+  load_balancer_type = "network"
   # security_groups            = [aws_security_group.elb.id] # Disable if type "network"
   subnets                    = var.subnets
   enable_deletion_protection = false

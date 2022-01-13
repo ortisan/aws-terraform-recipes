@@ -45,8 +45,21 @@ resource "aws_iam_role_policy_attachment" "ec2_router" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
+resource "aws_iam_policy_attachment" "ssm1" {
+  name       = "atachment-ssm1"
+  roles      = [aws_iam_role.ec2_router.id]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_policy_attachment" "ssm2" {
+  name       = "atachment-ssm2"
+  roles       = [aws_iam_role.ec2_router.id]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
 resource "aws_iam_instance_profile" "router" {
   name = "ec2-router-instance-profile"
+  path = "/"
   role = aws_iam_role.ec2_router.name
 }
 

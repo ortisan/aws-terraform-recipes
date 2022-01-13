@@ -116,6 +116,9 @@ resource "aws_ecs_task_definition" "router" {
       cpu       = 10
       memory    = 512
       essential = true
+      "environment" : [
+        { "name" : "PARAM_STORE_NAME", "value" : "my-string" }
+      ],
       portMappings = [
         {
           containerPort = 8080

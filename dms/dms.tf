@@ -92,7 +92,7 @@ resource "aws_dms_replication_task" "userdb" {
   replication_task_id      = "userdb-task"
   // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.SelectionTransformation.Tablesettings.html
   table_mappings = data.template_file.table_mapping.rendered
-  //https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html  
+  // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html  
   replication_task_settings = data.template_file.task_settings.rendered
   source_endpoint_arn       = aws_dms_endpoint.source_userdb[0].endpoint_arn
   tags = {

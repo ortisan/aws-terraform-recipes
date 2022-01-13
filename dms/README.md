@@ -28,7 +28,6 @@ End taks:
 Result:
 ![image](images/dms-result.png)
 
-
 ### Docs:
 
 https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Introduction.HighLevelView.html
