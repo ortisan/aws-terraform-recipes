@@ -26,9 +26,31 @@ python generate_inserts.py
 mysql -h <db_instance_endpoint> -u ortisan -portisan123 userdb < automate/scripts/1-schema.sql
 mysql -h <db_instance_endpoint> -u ortisan -portisan123 userdb < automate/scripts/2-inserts.sql
 
+# Eg. Source
+# Schema
+mysql -h userdb.cn9vnkebenrp.us-east-1.rds.amazonaws.com -u ortisan -portisan123 userdb < automate/scripts/1-schema.sql
+# Data
+mysql -h userdb.cn9vnkebenrp.us-east-1.rds.amazonaws.com -u ortisan -portisan123 userdb < automate/scripts/2-inserts.sql
 
-mysql -h useraurora.cluster-cn9vnkebenrp.us-east-1.rds.amazonaws.com -u ortisan -portisan123 userdb
+# Eg. Target
+# Only schema. Data will be by DMS
+mysql -h useraurora.cluster-cn9vnkebenrp.us-east-1.rds.amazonaws.com -u ortisan -portisan123 useraurora < automate/scripts/1-schema.sql
+
 ```
+
+### Start DMS
+
+Follow [DMS instructions](https://github.com/ortisan/aws-terraform-recipes/tree/main/dms/README.md)
+
+### See results
+
+```sh
+mysql -h useraurora.cluster-cn9vnkebenrp.us-east-1.rds.amazonaws.com -u ortisan -portisan123 useraurora
+select count(1) from user;
+select count(1) from role_user;
+```
+
+![image](images/rds-select.png)
 
 ### Create snapshot
 
@@ -38,21 +60,3 @@ aws rds create-db-snapshot \
     --db-snapshot-identifier userdbsnapshot
 ```
 
-## Create Aurora From Snapshot
-
-Get the ARN of snapshot, and edit **db_instance_snapshot_arn** variable into aurora folder
-
-Create Aurora Cluster from DB Instance snapshot:
-
-```sh
-cd aurora
-terraform init
-terraform apply -auto-approve
-```
-
-**IMPORTANT: This procedure for restore from mysql 8.3 to Aurora Mysql 5.7 does not work because the major version. I will try from S3 bucket (TODO)**
-**Error: Error creating RDS Cluster: InvalidParameterCombination: Cannot upgrade from mysql 8.0.23 to aurora-mysql 5.7.mysql_aurora.2.10.1.Specify a current active database version, the latest active minor version for mysql 8.0 is 8.0.23.**
-**
-
-### Docs:
-https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html

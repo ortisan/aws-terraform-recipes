@@ -31,20 +31,43 @@ resource "aws_db_parameter_group" "default" {
   name   = "default-mysql-pg"
   family = "mysql8.0"
 
-  parameter {
-    name  = "character_set_server"
-    value = "utf8"
-  }
+  # parameter {
+  #   name  = "character_set_server"
+  #   value = "utf8"
+  # }
 
-  parameter {
-    name  = "character_set_client"
-    value = "utf8"
-  }
+  # parameter {
+  #   name  = "character_set_client"
+  #   value = "utf8"
+  # }
 
   # REQUIRED FOR DMS (https://aws.amazon.com/pt/premiumsupport/knowledge-center/dms-binary-logging-aurora-mysql/)
+  # https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html
+
+  # parameter {
+  #   name  = "server-id"
+  #   value = "1"
+  # }
+
   parameter {
     name  = "binlog_format"
     value = "ROW"
+  }
+
+  ## Cannot be modified
+  # parameter {
+  #   name  = "expire_logs_days"
+  #   value = "1"
+  # }
+
+  parameter {
+    name  = "binlog_row_image"
+    value = "FULL"
+  }
+
+  parameter {
+    name  = "binlog_checksum"
+    value = "NONE"
   }
 }
 

@@ -33,12 +33,12 @@ resource "aws_rds_cluster_parameter_group" "default" {
 
   parameter {
     name  = "character_set_server"
-    value = "utf8"
+    value = "utf8mb4"
   }
 
   parameter {
     name  = "character_set_client"
-    value = "utf8"
+    value = "utf8mb4"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_rds_cluster" "user" {
   database_name                   = "useraurora"
   engine                          = "aurora-mysql"
   engine_version                  = "5.7.mysql_aurora.2.10.1"
-  availability_zones              = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  availability_zones              = ["us-east-1a"]
   master_username                 = "ortisan"
   master_password                 = "ortisan123"
   storage_encrypted               = true
@@ -81,7 +81,7 @@ resource "aws_rds_cluster" "user" {
 }
 
 resource "aws_rds_cluster_instance" "user" {
-  count               = 2
+  count               = 1
   identifier          = "user-instance-${count.index}"
   cluster_identifier  = aws_rds_cluster.user.id
   instance_class      = "db.t3.medium"
