@@ -22,9 +22,6 @@ After starting task, the entire **userdb schema** will be migrate from DB Instan
 Starting task:
 ![image](images/dms-start.png)
 
-End taks:
-![image](images/dms-ends.png)
-
 Result:
 ![image](images/dms-result.png)
 
