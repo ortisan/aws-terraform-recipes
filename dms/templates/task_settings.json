@@ -1,13 +1,18 @@
 {
   "FullLoadSettings": {
-    "TargetTablePrepMode": "DO_NOTHING",
-    "StopTaskCachedChangesApplied": true
+    "TargetTablePrepMode": "TRUNCATE_BEFORE_LOAD",
+    "StopTaskCachedChangesNotApplied": true,
+    "StopTaskCachedChangesApplied": false,
+    "TransactionConsistencyTimeout": 1200
   },
   "Logging": {
     "EnableLogging": true
-  },  
+  },
   "ValidationSettings": {
     "EnableValidation": true,
-    "ValidationMode": "ROW_LEVEL"
+    "ValidationMode": "ROW_LEVEL",
+    "ThreadCount": 10,
+    "HandleCollationDiff": false,
+    "RecordFailureDelayLimitInMinutes": 30
   }
 }

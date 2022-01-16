@@ -55,6 +55,7 @@ resource "aws_dms_endpoint" "source_userdb" {
 }
 
 # Target endpoint
+# https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.MySQL.html
 resource "aws_dms_endpoint" "target_userdb" {
   count                       = local.dms_count
   database_name               = var.target_attributes.database_name
@@ -65,7 +66,7 @@ resource "aws_dms_endpoint" "target_userdb" {
   port                        = var.target_attributes.port
   username                    = var.target_attributes.username
   password                    = var.target_attributes.password
-  extra_connection_attributes = ""
+  extra_connection_attributes = "initstmt=SET FOREIGN_KEY_CHECKS=0"
   ssl_mode                    = "none"
   tags = {
     Name = "target_useraurora_endpoint"
@@ -76,8 +77,12 @@ resource "aws_dms_endpoint" "target_userdb" {
 }
 
 # Read table template https://github.com/amazon-archives/aws-database-migration-tools/blob/master/Blogs/DMS%20Automation%20Framework/S3Files/table-mappings.json
-data "template_file" "table_mapping" {
-  template = file("${path.module}/templates/table_mapping.json")
+data "template_file" "table_mapping_user" {
+  template = file("${path.module}/templates/table_mapping_user.json")
+}
+
+data "template_file" "table_mapping_role_user" {
+  template = file("${path.module}/templates/table_mapping_role_user.json")
 }
 
 data "template_file" "task_settings" {
@@ -85,13 +90,32 @@ data "template_file" "task_settings" {
 }
 
 # Create a new replication task
-resource "aws_dms_replication_task" "userdb" {
+resource "aws_dms_replication_task" "user" {
   count                    = local.dms_count
   migration_type           = "full-load-and-cdc"
   replication_instance_arn = aws_dms_replication_instance.replication_userdb[0].replication_instance_arn
-  replication_task_id      = "userdb-task"
+  replication_task_id      = "user-task"
   // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.SelectionTransformation.Tablesettings.html
-  table_mappings = data.template_file.table_mapping.rendered
+  table_mappings = data.template_file.table_mapping_user.rendered
+  // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html  
+  replication_task_settings = data.template_file.task_settings.rendered
+  source_endpoint_arn       = aws_dms_endpoint.source_userdb[0].endpoint_arn
+  tags = {
+    Name = "replication task userdb"
+  }
+  target_endpoint_arn = aws_dms_endpoint.target_userdb[0].endpoint_arn
+  depends_on = [
+    aws_dms_replication_instance.replication_userdb
+  ]
+}
+
+resource "aws_dms_replication_task" "role_user" {
+  count                    = local.dms_count
+  migration_type           = "full-load-and-cdc"
+  replication_instance_arn = aws_dms_replication_instance.replication_userdb[0].replication_instance_arn
+  replication_task_id      = "role-user-task"
+  // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.SelectionTransformation.Tablesettings.html
+  table_mappings = data.template_file.table_mapping_role_user.rendered
   // https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html  
   replication_task_settings = data.template_file.task_settings.rendered
   source_endpoint_arn       = aws_dms_endpoint.source_userdb[0].endpoint_arn
