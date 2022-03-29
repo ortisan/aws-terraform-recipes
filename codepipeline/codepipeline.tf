@@ -42,19 +42,19 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Deploy"
 
     action {
-      name = "Deploy"
-      category = "Deploy"
-      owner = "AWS"
-      provider = "CodeDeployToECS"
+      name            = "Deploy"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "CodeDeployToECS"
       input_artifacts = ["source_output"]
-      version = "1"
+      version         = "1"
       configuration = {
-        ApplicationName = "nginx_app"
-        DeploymentGroupName = "nginx_app"
+        ApplicationName                = "nginx_app"
+        DeploymentGroupName            = "nginx_app"
         TaskDefinitionTemplateArtifact = "source_output"
-        TaskDefinitionTemplatePath = "taskdef.json"
-        AppSpecTemplateArtifact = "source_output"
-        AppSpecTemplatePath = "appspec.yml"
+        TaskDefinitionTemplatePath     = "taskdef.json"
+        AppSpecTemplateArtifact        = "source_output"
+        AppSpecTemplatePath            = "appspec.yml"
       }
     }
   }

@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  variables:
+    MAJOR: "1"
+    MINOR: "1"
+phases:
+  # install:
+  #   commands:
+  #     - apk add python python-dev py-pip build-base
+  #     - apk add jq
+  #     - pip install --upgrade pip
+  #     - pip install awscli
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 779882487479.dkr.ecr.us-east-1.amazonaws.com/nginx
+  build:
+    commands:
+      - TAG=$(uuidgen)
+      - docker build -t 779882487479.dkr.ecr.us-east-1.amazonaws.com/nginx:latest -t 779882487479.dkr.ecr.us-east-1.amazonaws.com/nginx:$TAG .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 779882487479.dkr.ecr.us-east-1.amazonaws.com/nginx:latest
