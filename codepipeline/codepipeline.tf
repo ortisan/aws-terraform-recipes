@@ -16,41 +16,39 @@ resource "aws_codepipeline" "codepipeline" {
       provider         = "CodeCommit"
       version          = "1"
       output_artifacts = ["source_output"]
-
       configuration = {
         RepositoryName = aws_codecommit_repository.nginx_app.id
         BranchName     = var.branch_name
       }
     }
   }
-  # stage {
-  #   name = "Build"
-  #   action {
-  #     name             = "Build"
-  #     category         = "Build"
-  #     owner            = "AWS"
-  #     provider         = "CodeBuild"
-  #     input_artifacts  = ["source_output"]
-  #     output_artifacts = ["build_output"]
-  #     version          = "1"
-  #     configuration = {
-  #       ProjectName = "test"
-  #     }
-  #   }
-  # }
+  stage {
+    name = "Build"
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["build_output"]
+      version          = "1"
+      configuration = {
+        ProjectName = var.project_name
+      }
+    }
+  }
   stage {
     name = "Deploy"
-
     action {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
       provider        = "CodeDeployToECS"
-      input_artifacts = ["source_output"]
+      input_artifacts = ["source_output", "build_output"]
       version         = "1"
       configuration = {
-        ApplicationName                = "nginx_app"
-        DeploymentGroupName            = "nginx_app"
+        ApplicationName                = var.project_name
+        DeploymentGroupName            = var.project_name
         TaskDefinitionTemplateArtifact = "source_output"
         TaskDefinitionTemplatePath     = "taskdef.json"
         AppSpecTemplateArtifact        = "source_output"

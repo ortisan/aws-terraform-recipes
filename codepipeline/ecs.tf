@@ -1,5 +1,3 @@
-
-
 resource "aws_iam_role" "ecs_task_role" {
   name = "ecs_task_role"
 
@@ -128,25 +126,22 @@ resource "aws_ecs_task_definition" "nginx_app" {
   ]
 }
 
-resource "aws_security_group" "nginx_app" {
-  name        = "nginx-app"
-  description = "ECS service"
-  vpc_id      = var.vpc_id
+resource "aws_security_group_rule" "nginx_app_80" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = var.security_group_ids[0]
+}
 
-  ingress {
-    description = "Security group to govern who can access the endpoints"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_security_group_rule" "nginx_app_8080" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = var.security_group_ids[0]
 }
 
 resource "aws_ecs_service" "nginx_app" {
@@ -162,14 +157,12 @@ resource "aws_ecs_service" "nginx_app" {
   network_configuration {
     subnets          = var.subnet_ids
     assign_public_ip = true
-    security_groups  = [aws_security_group.nginx_app.id]
+    security_groups  = var.security_group_ids
   }
-
   load_balancer {
     target_group_arn = aws_lb_target_group.nginx_app_blue.arn
     container_name   = "nginx-app"
     container_port   = 80
   }
-
   depends_on = [aws_cloudwatch_log_group.nginx_app]
 }

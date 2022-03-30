@@ -18,6 +18,10 @@ variable "subnet_ids" {
   default     = ["subnet-01459f2806e7d9f24", "subnet-080509807e667e94e"]
 }
 
+variable "route_table_id" {
+  default = "rtb-045bbd7d22b5e279d"
+}
+
 variable "kms_arn" {
   description = "ARN of KMS"
   type        = string
@@ -36,4 +40,9 @@ variable "task_image" {
 
 variable "branch_name" {
   default = "master"
+}
+
+
+variable "project_name" {
+  default = "nginx-app"
 }

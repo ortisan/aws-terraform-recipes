@@ -39,33 +39,33 @@ resource "aws_iam_role_policy" "codebuild" {
         "*"
       ],
       "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:*"
       ]
     },
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:CreateNetworkInterface",
-        "ec2:DescribeDhcpOptions",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DeleteNetworkInterface",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeVpcs"
+        "ec2:*"
       ],
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:CompleteLayerUpload",
-        "ecr:GetAuthorizationToken",
-        "ecr:InitiateLayerUpload",
-        "ecr:PutImage",
-        "ecr:UploadLayerPart"
+        "ec2:CreateNetworkInterfacePermission"
+      ],
+      "Resource": "arn:aws:ec2:us-east-1:${data.aws_caller_identity.current.account_id}:network-interface/*",
+      "Condition": {
+        "StringEquals": {
+            "ec2:AuthorizedService": "codebuild.amazonaws.com",
+            "ec2:Subnet": "${aws_subnet.codepipeline_1.arn}"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:*"
       ],
       "Resource": "*"
     },
@@ -78,6 +78,16 @@ resource "aws_iam_role_policy" "codebuild" {
         "${aws_s3_bucket.codebuild_bucket.arn}",
         "${aws_s3_bucket.codebuild_bucket.arn}/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.codepipeline_bucket.arn}",
+        "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+      ]
     }
   ]
 }
@@ -89,51 +99,34 @@ data "template_file" "buildspec_codecommit" {
 }
 
 resource "aws_codebuild_project" "nginx_app" {
-  name          = "nginx-app"
-  build_timeout = "5"
+  name          = var.project_name
+  build_timeout = "10"
   service_role  = aws_iam_role.codebuild.arn
-
   artifacts {
-    type = "NO_ARTIFACTS"
+    type = "CODEPIPELINE"
   }
-
   cache {
     type     = "S3"
     location = aws_s3_bucket.codebuild_bucket.bucket
   }
-
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/standard:3.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-
-    environment_variable {
-      name  = "SOME_KEY1"
-      value = "SOME_VALUE1"
-    }
-
-    environment_variable {
-      name  = "SOME_KEY2"
-      value = "SOME_VALUE2"
-      type  = "PARAMETER_STORE"
-    }
   }
-
   logs_config {
     cloudwatch_logs {
       group_name  = "log-group"
       stream_name = "log-stream"
     }
-
     s3_logs {
       status   = "ENABLED"
       location = "${aws_s3_bucket.codebuild_bucket.id}/build-log"
     }
   }
-
   source {
-    buildspec           = data.template_file.buildspec_codecommit.content
+    buildspec           = data.template_file.buildspec_codecommit.rendered
     git_clone_depth     = 0
     insecure_ssl        = false
     report_build_status = false
@@ -142,7 +135,7 @@ resource "aws_codebuild_project" "nginx_app" {
 
   vpc_config {
     vpc_id             = var.vpc_id
-    subnets            = var.subnet_ids
+    subnets            = [aws_subnet.codepipeline_1.id]
     security_group_ids = var.security_group_ids
   }
 

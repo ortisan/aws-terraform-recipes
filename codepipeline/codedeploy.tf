@@ -1,10 +1,10 @@
 resource "aws_codedeploy_app" "nginx_app" {
   compute_platform = "ECS"
-  name             = "nginx_app"
+  name             = var.project_name
 }
 
 resource "aws_codedeploy_deployment_config" "nginx_app" {
-  deployment_config_name = "nginx_app"
+  deployment_config_name = var.project_name
   compute_platform       = "ECS"
   traffic_routing_config {
     type = "TimeBasedCanary"
@@ -14,7 +14,6 @@ resource "aws_codedeploy_deployment_config" "nginx_app" {
     }
   }
 }
-
 
 resource "aws_iam_role" "custom_role_codedeploy" {
   name = "custom-role-codedeploy"
@@ -73,7 +72,7 @@ resource "aws_sns_topic" "codedeploy_sns_notifier" {
 
 resource "aws_codedeploy_deployment_group" "nginx_app" {
   app_name               = aws_codedeploy_app.nginx_app.name
-  deployment_group_name  = "nginx-app"
+  deployment_group_name  = var.project_name
   service_role_arn       = aws_iam_role.custom_role_codedeploy.arn
   deployment_config_name = aws_codedeploy_deployment_config.nginx_app.id
   deployment_style {
