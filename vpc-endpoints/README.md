@@ -16,11 +16,28 @@ terraform apply -auto-approve
 
 ## Testing
 
+List endpoints
+
+```sh
+aws ec2 describe-vpc-endpoint-services --region us-east-1
+```
+
 Connect to Bastion and make calls to S3
 
 ```sh
-terraform init
-terraform apply -auto-approve
+aws s3 ls
+```
+
+Describe instance
+
+```sh
+aws ec2 describe-instances --instance-ids i-0c5d1b5041ca419ef --region us-east-1
+```
+
+Show all tables
+
+```sh
+aws dynamodb list-tables --region us-east-1
 ```
 
 

@@ -87,7 +87,11 @@ resource "aws_iam_policy" "bastion" {
     },
     {
       "Effect": "Allow",
-      "Action": ["eks:DescribeCluster", "eks:ListClusters"],
+      "Action": [
+        "s3:*",
+        "dynamodb:*",
+        "ec2:*"
+      ],
       "Resource": "*"
     }
   ]
@@ -102,6 +106,7 @@ resource "aws_iam_role_policy_attachment" "bastion" {
 
 resource "aws_iam_instance_profile" "bastion" {
   name = "instance_profile_bastion"
+  path = "/"
   role = aws_iam_role.bastion.name
 }
 
@@ -129,7 +134,7 @@ resource "aws_security_group_rule" "bastion_egress" {
 
 resource "aws_security_group_rule" "bastion_ingress" {
   description       = "Allow all comunication."
-  protocol          = "tcp"
+  protocol          = "-1"
   security_group_id = aws_security_group.bastion.id
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
@@ -150,6 +155,7 @@ resource "aws_instance" "bastion" {
   instance_type          = var.instance_type_bastion
   iam_instance_profile   = aws_iam_instance_profile.bastion.id
   vpc_security_group_ids = [aws_security_group.bastion.id]
-  user_data              = file("./templates/user_data.sh")
+  # user_data              = file("./templates/user_data.sh")
   subnet_id              = aws_subnet.internal_a.id
+  key_name               = var.key_name_bastion
 }

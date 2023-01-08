@@ -20,6 +20,11 @@ resource "aws_route_table" "internal" {
   )
 }
 
+resource "aws_main_route_table_association" "internal" {
+  vpc_id         = aws_vpc.internal.id
+  route_table_id = aws_route_table.internal.id
+}
+
 resource "aws_subnet" "internal_a" {
   vpc_id                  = aws_vpc.internal.id
   cidr_block              = "192.168.0.0/24"
