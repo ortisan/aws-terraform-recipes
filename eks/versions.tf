@@ -22,5 +22,9 @@ terraform {
       source  = "hashicorp/null"
       version = ">= 3.0"
     }
+    template = {
+      source  = "hashicorp/template"
+      version = ">=2.2"
+    }
   }
 }

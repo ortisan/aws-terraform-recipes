@@ -180,4 +180,14 @@ variable "eks_oidc_root_ca_thumbprint" {
   default     = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
 }
 
+variable "docker_hub" {
+  type    = string
+  default = "779882487479.dkr.ecr.us-east-1.amazonaws.com"
+}
+
+variable "istio_target_group_type" {
+  type    = string
+  default = "instance" # instance for ec2, ip for fargate
+}
+
 

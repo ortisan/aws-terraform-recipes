@@ -1,0 +1,3 @@
+name: "istio-tgb-80-nlb"
+tg_80_arn: ""
+target_type: "instance" # instance for ec2, ip for fargate

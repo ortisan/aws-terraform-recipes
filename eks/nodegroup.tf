@@ -140,7 +140,6 @@ data "aws_ami" "eks_ami_latest" {
   filter {
     name   = "name"
     values = ["amazon-eks-node-${var.cluster_version}-v*"]
-    #values = ["/aws/service/eks/optimized-ami/${var.cluster_version}/amazon-linux-2/recommended"]
   }
 }
 

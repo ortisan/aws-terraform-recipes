@@ -404,7 +404,6 @@ locals {
 }
 
 resource "kubernetes_config_map" "aws_auth" {
-
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -428,17 +427,6 @@ resource "kubernetes_config_map" "aws_auth" {
     # mapAccounts = yamlencode(var.map_accounts)
   }
 
-
 }
 
-# data "http" "wait_for_cluster" {
-#   url            = format("%s/healthz", aws_eks_cluster.cluster.endpoint)
-#   # ca_certificate = base64decode(coalescelist(aws_eks_cluster.cluster.certificate_authority[0].data, [""])[0])
-#   # timeout        = 30
 
-#   depends_on = [
-#     aws_eks_cluster.cluster,
-#     # aws_security_group_rule.cluster_private_access_sg_source,
-#     # aws_security_group_rule.cluster_private_access_cidrs_source,
-#   ]
-# }
