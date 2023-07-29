@@ -220,3 +220,27 @@ terraform state rm kubernetes_config_map.aws_auth
 From https://github.com/terraform-aws-modules/terraform-aws-eks/issues/852
 
 terraform import kubernetes_config_map.aws_auth kube-system/aws-auth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+docker tag mockserver/mockserver:latest public.ecr.aws/b0a4t3l5/mockserver
+docker push public.ecr.aws/b0a4t3l5/mockserver
